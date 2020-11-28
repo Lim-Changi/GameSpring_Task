@@ -12,6 +12,14 @@ if (config.use_env_variable) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.User = require('./users')(sequelize, Sequelize);
-db.Room = require('./rooms')()
+db.Friend = require('./friends')(sequelize, Sequelize);
+db.Request = require('./requests')(sequelize, Sequelize);
+
+
+db.Request.belongsTo(db.User, { as: 'requester' });
+
+db.Friend.belongsTo(db.User, { as: 'requester' });
+
+
 
 module.exports = db;

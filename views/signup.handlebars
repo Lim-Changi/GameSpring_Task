@@ -1,0 +1,19 @@
+<div class="card card-register mx-auto mt-5">
+    <div class="card-header">회원가입</div>
+    <div class="card-body">
+        <form action="/user/signup" method="post">
+            <div class="form-group">
+                <label for="inputuserId">ID</label>
+                <input required name="userId" class="form-control" id="inputuserId" type="id" placeholder="ID">
+            </div>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="exampleInputPassword">Password</label>
+                    <input required name="password" class="form-control" id="exampleInputPassword" type="password"
+                        placeholder="Password">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+        </form>
+    </div>
+</div>

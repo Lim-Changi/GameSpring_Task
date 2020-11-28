@@ -2,7 +2,10 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const exphbs = require('express-handlebars');
+const session = require('express-session');
+const flash = require('connect-flash');
+
 
 const { sequelize } = require('./models');
 sequelize.sync({ alter: true })
@@ -13,29 +16,36 @@ sequelize.sync({ alter: true })
     console.log(err);
   })
 
-
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
 
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(session({
+  secret: 'Changi',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.success_message = req.flash('success_message');
+  res.locals.error_message = req.flash('error_message');
+  next();
+})
+
+app.use('/', require('./routes/index'));
+
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+// app.use(function (req, res, next) {
+//   next(createError(404));
+// });
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -45,6 +55,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
+  // console.log(err);
   res.render('error');
 });
 
