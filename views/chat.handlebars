@@ -1,0 +1,76 @@
+<div class="card card-register mx-auto mt-5">
+    <input type="hidden" name="roomId" value={{roomInfo.id}} />
+    <input type="hidden" name="userId" value={{userInfo.userId}} />
+    <input type="hidden" name="roomUsers" value={{roomInfo.users}} />
+
+    {{!-- <div class="header-wrap">
+        <a href="/admin/rooms" class="menu btn-primary">채팅방</a>
+        <a href="/admin/users" class="menu btn-primary">전체유저</a>
+        <a href="/friend/requests" class="menu btn-primary">친구</a>
+        <a href="/admin/logout" class="menu btn-primary">로그아웃</a>
+    </div> --}}
+    <div class="card-header">채팅방: {{roomInfo.id}}</div>
+    <div class="qard-body">
+        <div class="qard-block qard-1">
+            <ul id="chatLog"></ul>
+            <div class="qard-box">
+                <form action="" id="sendForm" class="form-group">
+                    <input name="message" autocomplete="off" /><button>전송</button>
+                </form>
+            </div>
+            <div class="qard-leave">
+                <form action="/admin/rooms" method="get">
+                    <button type="submit" class="btn btn-danger">나가기</button>
+                </form>
+            </div>
+        </div>
+        <div class="qard-block qard-2">
+            <h2 id="users">현재 인원:</h2>
+            <a id="userLog"></a>
+        </div>
+    </div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let socket = io();
+
+
+    socket.on('server message', function (data) {
+        $('#chatLog').append('<li> ' + data.chatId + ': ' + data.message + '</li>');
+    });
+
+    socket.on('server info', function (data) {
+        $('#users').append(data.roomUsers);
+        $('#userLog').append('<li> ' + data.userId + ' </li>');
+        $('#chatLog').append('<li> ' + data.userId + ' 님이 입장하셨습니다. </li>')
+    });
+    socket.on('leave', function (data) {
+        $('#chatLog').append('<li> ' + data.userId + '님이 방을 나갔습니다 </li>');
+    });
+
+    $(document).ready(function () {
+
+        var roomNum = $('input[name=roomId]');
+        var roomUsers = $('input[name=roomUsers]');
+        var userId = $('input[name=userId]');
+        socket.emit('client roomNum', { roomNum: roomNum.val() });
+        socket.emit('client roomUsers', { roomUsers: roomUsers.val() });
+        socket.emit('client chatId', { chatId: userId.val() });
+        socket.emit('client userId', { userId: userId.val() });
+        return false;
+
+    });
+
+    $(document).ready(function () {
+        $('#sendForm').submit(function () {
+            var message = $('#sendForm input[name=message]');
+
+            socket.emit('client message', { message: message.val() });
+
+            message.val('');
+            return false;
+        });
+    });
+</script>

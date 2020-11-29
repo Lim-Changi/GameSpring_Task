@@ -12,10 +12,10 @@ const methodOverride = require('method-override');
 const { sequelize } = require('./models');
 sequelize.sync({ alter: true })
   .then(() => {
-    console.log('데이터베이스 연결 성공');
+
   })
   .catch((err) => {
-    console.log(err);
+
   })
 
 const app = express();
@@ -49,6 +49,58 @@ app.use(methodOverride('_method'));
 app.use('/', require('./routes/index'));
 
 
+// Socket.IO
+
+socketServer = require('socket.io')();
+const { chatService } = require('./service');
+
+
+socketServer.on('connection', async (socket) => {
+
+  var roomId;
+  var disconnetUser = [];
+
+  socket.on('disconnect', async () => {
+
+    socket.broadcast.emit('leave', { userId: disconnetUser[0] })
+    await chatService.reduceUser(roomId);
+  });
+  socket.on('client roomNum', async (roomNum) => {
+    roomId = roomNum.roomNum;
+    socket.on('client roomUsers', async (roomUsers) => {
+      socket.on('client userId', async (userId) => {
+        disconnetUser[0] = userId.userId;
+        socketServer.emit('server info', {
+          roomNum: roomNum.roomNum,
+          roomUsers: roomUsers.roomUsers,
+          userId: userId.userId
+        })
+        await chatService.addUser(roomNum.roomNum);
+      })
+    })
+  })
+  socket.on('client chatId', (chatId) => {
+    socket.on('client message', (msg) => {
+      socketServer.emit('server message', {
+        message: msg.message, chatId: chatId.chatId
+      });
+    });
+  });
+  socket.on('dm userId', (userId) => {
+    socket.on('dm message', (msg) => {
+      socketServer.emit('dm message', {
+        message: msg.message, userId: userId.userId
+      })
+    })
+  });
+  socket.on('dm userInfo', (userId) => {
+    socketServer.emit('dm start', {
+      userId: userId.userId
+    })
+  })
+
+
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -63,7 +115,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  // console.log(err);
+
   res.render('error');
 });
 

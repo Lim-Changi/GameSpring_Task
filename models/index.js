@@ -14,6 +14,7 @@ db.Sequelize = Sequelize;
 db.User = require('./users')(sequelize, Sequelize);
 db.Friend = require('./friends')(sequelize, Sequelize);
 db.Request = require('./requests')(sequelize, Sequelize);
+db.Room = require('./rooms')(sequelize, Sequelize);
 
 
 db.Request.belongsTo(db.User, { as: 'requester' });

@@ -22,10 +22,48 @@ body {
   display: flex;
 }
 
+.qard-body {
+  display: flex;
+  padding: 1.25rem;
+  height: 500px;
+  justify-content: space-evenly;
+}
+
+.qard-block {
+  border: 3px;
+  border-style: ridge;
+  border-color: #8895a0;
+  overflow-y: scroll;
+}
+.qard-1 {
+  width: 70%;
+}
+
+.qard-2 {
+  width: 30%;
+  text-align: center;
+}
+
+.qard-3 {
+  width: 30%;
+  text-align: right;
+}
+.qard-box {
+  position: absolute;
+  bottom: 30px;
+  right: 330px;
+}
+.qard-leave {
+  position: absolute;
+  bottom: 43px;
+  right: 200px;
+}
+
 .header-wrap {
   position: fixed;
   top: 20px;
   right: 30px;
+  z-index: 2;
 }
 .menu {
   margin: 20px;

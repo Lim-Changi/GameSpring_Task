@@ -5,21 +5,19 @@
         <a href="/friend/requests" class="menu btn-primary">친구</a>
         <a href="/admin/logout" class="menu btn-primary">로그아웃</a>
     </div>
-    <div class="card-header">전체유저</div>
+    <div class="card-header">채팅방</div>
     <div class="card-body">
-        {{#each }}
+        {{#each allRooms}}
         <div class="card mb-2">
             <div class="card-body">
-                <h4 class="card-title">ID: {{userId}}</h4>
-                <p class="card-text">가입날짜: {{generateTime createdAt 'MMMM Do YYYY'}}</p>
-                <p class="card-text">친구수: {{friends}}</p>
-                {{#if myFriend}}
-                {{else}}
-                <form action="/friend/addrequest" method="post">
-                    <input type="hidden" name="hostId" value={{id}} />
-                    <button type="submit" class="btn btn-primary">친구요청</button>
+                <h4 class="cart-title">방 번호: {{id}}</h4>
+                <p> 참여인원 수: {{users}}</p>
+                <form action="/admin/chat" method="get">
+                    <div class="kard-body">
+                        <input type="hidden" name="roomId" value={{id}} />
+                        <button type="submit" class="btn btn-info">입장</button>
+                    </div>
                 </form>
-                {{/if}}
             </div>
         </div>
         {{/each}}

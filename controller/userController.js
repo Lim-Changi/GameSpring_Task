@@ -4,7 +4,6 @@ const jwt = require('../modules/jwt');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const { userService } = require('../service');
-const { countFriends } = require('../service/userService');
 
 
 module.exports = {
@@ -31,7 +30,7 @@ module.exports = {
 
         } catch (err) {
             req.flash('error_message', '회원가입에 실패하셨습니다');
-            console.log(err);
+
             return res.status(500).redirect('/signup');
         }
 
@@ -59,7 +58,7 @@ module.exports = {
             req.flash('success_message', '로그인에 성공하셨습니다');
             res.status(200).redirect('/admin/rooms');
         } catch (error) {
-            console.log(error);
+
             req.flash('error_message', '로그인에 실패하셨습니다');
             return res.status(500).redirect('/');
         }
@@ -84,11 +83,10 @@ module.exports = {
                 users[i].friends = count;
                 users[i].myFriend = friends.includes(user.id);
             }
-            console.log(users);
             res.status(200).render('user', { users });
 
         } catch (error) {
-            console.log(error);
+
             res.status(500).render(error);
         }
     },
@@ -99,7 +97,7 @@ module.exports = {
             return res.status(200).redirect('/')
 
         } catch (error) {
-            console.log(error);
+
             return res.status(500).redirect('/rooms')
         }
     }

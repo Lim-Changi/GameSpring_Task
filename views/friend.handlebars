@@ -20,9 +20,9 @@
                 <h4 class="card-title">ID: {{userId}}</h4>
                 <p class="card-text">가입날짜: {{generateTime createdAt 'MMMM Do YYYY'}}</p>
                 <div class="flex-container">
-                    <form action="/friend/addfriend" method="post">
+                    <form action="/admin/dm" method="get">
                         <div class="kard-body">
-                            <input type="hidden" name="requestId" value={{id}} />
+                            <input type="hidden" name="frienduserId" value={{userId}} />
                             <button type="submit" class="btn btn-info">DM</button>
                         </div>
                     </form>

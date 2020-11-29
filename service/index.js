@@ -1,3 +1,4 @@
 module.exports = {
-    userService: require('./userService')
+    userService: require('./userService'),
+    chatService: require('./chatService')
 }
