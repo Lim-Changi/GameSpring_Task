@@ -23,7 +23,7 @@ module.exports = {
                 requesterId: user.id, hostId
             });
             req.flash('success_message', '친구요청에 성공하셨습니다');
-            res.status(200).redirect('/admin/users');
+            return res.status(200).redirect('/admin/users');
         } catch (error) {
 
             req.flash('error_message', '친구요청에 실패하셨습니다');
@@ -51,7 +51,7 @@ module.exports = {
             })
 
             req.flash('success_message', '친구등록에 성공하셨습니다');
-            res.status(200).redirect('requests');
+            return res.status(200).redirect('requests');
         } catch (error) {
 
             req.flash('error_message', '친구등록에 실패하셨습니다');
@@ -68,7 +68,7 @@ module.exports = {
                 }
             })
             req.flash('success_message', '친구거절에 성공하셨습니다');
-            res.status(200).redirect('requests');
+            return res.status(200).redirect('requests');
         } catch (error) {
 
             req.flash('error_message', '친구거절에 실패하셨습니다');
@@ -90,7 +90,7 @@ module.exports = {
                 }]
             });
             const allRequests = requests.map(data => data.get({ plain: true }));
-            res.status(200).render('request', { allRequests });
+            return res.status(200).render('request', { allRequests });
 
         } catch (error) {
 
@@ -111,7 +111,7 @@ module.exports = {
                 attributes: ['id', 'userId', 'createdAt']
             });
             const allFriends = getFriends.map(data => data.get({ plain: true }))
-            res.status(200).render('friend', { allFriends });
+            return res.status(200).render('friend', { allFriends });
 
         } catch (error) {
 

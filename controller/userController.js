@@ -18,7 +18,7 @@ module.exports = {
             })
             if (alreadyEmail) {
                 req.flash('error_message', '이미 존재하는 아이디입니다');
-                res.status(409).redirect('/signup')
+                return res.status(409).redirect('/signup')
             }
             const salt = await bcrypt.genSalt(10);
             const hashedpw = await bcrypt.hash(password, salt);
@@ -56,7 +56,7 @@ module.exports = {
             const token = await jwt.sign(Id);
             res.cookie('authorization', 'Bearer ' + token);
             req.flash('success_message', '로그인에 성공하셨습니다');
-            res.status(200).redirect('/admin/rooms');
+            return res.status(200).redirect('/admin/rooms');
         } catch (error) {
 
             req.flash('error_message', '로그인에 실패하셨습니다');
@@ -83,11 +83,11 @@ module.exports = {
                 users[i].friends = count;
                 users[i].myFriend = friends.includes(user.id);
             }
-            res.status(200).render('user', { users });
+            return res.status(200).render('user', { users });
 
         } catch (error) {
 
-            res.status(500).render(error);
+            return res.status(500).render(error);
         }
     },
     //로그아웃
