@@ -1,0 +1,42 @@
+<div class="card card-register mx-auto mt-5">
+    <div class="header-wrap">
+        <a href="/admin/rooms" class="menu btn-primary">채팅방</a>
+        <a href="/admin/users" class="menu btn-primary">전체유저</a>
+        <a href="/friend/requests" class="menu btn-primary">친구</a>
+        <a href="/admin/logout" class="menu btn-primary">로그아웃</a>
+    </div>
+    <div class="card-header">친구목록
+        <hr>
+        <div class="flex-container-even">
+            <a href="/friend/requests" class="btn-outline-secondary.focus">수신함</a>
+            <a href="/friend/list" class="btn-outline-secondary:focus">목록</a>
+        </div>
+    </div>
+
+    <div class="card-body">
+        {{#each allFriends}}
+        <div class="card mb-2">
+            <div class="card-body">
+                <h4 class="card-title">ID: {{userId}}</h4>
+                <p class="card-text">가입날짜: {{generateTime createdAt 'MMMM Do YYYY'}}</p>
+                <div class="flex-container">
+                    <form action="/friend/addfriend" method="post">
+                        <div class="kard-body">
+                            <input type="hidden" name="requestId" value={{id}} />
+                            <button type="submit" class="btn btn-info">DM</button>
+                        </div>
+                    </form>
+                    <form action="/friend/deletefriend?_method=DELETE" method="post">
+                        <div class="kard-body">
+                            <input type="hidden" name="friendId" value={{id}} />
+                            <button type="submit" class="btn btn-danger">친구삭제</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+</div>

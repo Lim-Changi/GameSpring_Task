@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
 const flash = require('connect-flash');
+const methodOverride = require('method-override');
+
 
 
 const { sequelize } = require('./models');
@@ -18,9 +20,13 @@ sequelize.sync({ alter: true })
 
 const app = express();
 
+
 // view engine setup
-app.engine('handlebars', exphbs());
+const { generateTime } = require('./helpers/handlebars-helpers');
+app.engine('handlebars', exphbs({ helpers: { generateTime: generateTime } }));
 app.set('view engine', 'handlebars');
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -38,14 +44,16 @@ app.use((req, res, next) => {
   res.locals.error_message = req.flash('error_message');
   next();
 })
+app.use(methodOverride('_method'));
 
 app.use('/', require('./routes/index'));
 
 
+
 // catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//   next(createError(404));
-// });
+app.use(function (req, res, next) {
+  next(createError(404));
+});
 
 // error handler
 app.use(function (err, req, res, next) {

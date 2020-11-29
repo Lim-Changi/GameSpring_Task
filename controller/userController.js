@@ -57,7 +57,7 @@ module.exports = {
             const token = await jwt.sign(Id);
             res.cookie('authorization', 'Bearer ' + token);
             req.flash('success_message', '로그인에 성공하셨습니다');
-            res.status(200).redirect('/rooms');
+            res.status(200).redirect('/admin/rooms');
         } catch (error) {
             console.log(error);
             req.flash('error_message', '로그인에 실패하셨습니다');
@@ -85,7 +85,7 @@ module.exports = {
                 users[i].myFriend = friends.includes(user.id);
             }
             console.log(users);
-            res.status(200).render('users');
+            res.status(200).render('user', { users });
 
         } catch (error) {
             console.log(error);
